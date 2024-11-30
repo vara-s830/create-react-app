@@ -1,55 +1,54 @@
----
-id: adding-a-css-modules-stylesheet
-title: Adding a CSS Modules Stylesheet
-sidebar_label: Adding CSS Modules
----
+import React, { useState } from "react";
 
-> Note: this feature is available with `react-scripts@2.0.0` and higher.
+const KanbanBoard = () => {
+  const [tasks, setTasks] = useState({
+    todo: [
+      { id: "CAM-5", title: "Add Multi-Language Support", type: "Feature Request" },
+      { id: "CAM-8", title: "Create Onboarding Tutorial for New Users", type: "Feature Request" },
+      { id: "CAM-2", title: "Implement Email Notification System", type: "Feature Request" },
+      { id: "CAM-1", title: "Update User Profile Page UI", type: "Feature Request" },
+    ],
+    inProgress: [
+      { id: "CAM-3", title: "Optimize Database Queries for Performance", type: "Feature Request" },
+    ],
+    done: [
+      { id: "CAM-6", title: "Enhance Search Functionality", type: "Feature Request" },
+      { id: "CAM-7", title: "Integrate Third-Party Payment Gateway", type: "Feature Request" },
+      { id: "CAM-11", title: "Conduct Security Vulnerability Assessment", type: "Feature Request" },
+      { id: "CAM-10", title: "Upgrade Server Infrastructure", type: "Feature Request" },
+      { id: "CAM-9", title: "Implement Role-Based Access Control (RBAC)", type: "Feature Request" },
+    ],
+    canceled: [],
+  });
 
-This project supports [CSS Modules](https://github.com/css-modules/css-modules) alongside regular stylesheets using the `[name].module.css` file naming convention. CSS Modules allows the scoping of CSS by automatically creating a unique classname of the format `[filename]\_[classname]\_\_[hash]`.
+  return (
+    <div style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+      {Object.entries(tasks).map(([status, items]) => (
+        <div key={status} style={{ flex: 1, border: "1px solid #ddd", borderRadius: "4px" }}>
+          <h3 style={{ textAlign: "center", background: "#f5f5f5", margin: 0, padding: "0.5rem" }}>
+            {status.charAt(0).toUpperCase() + status.slice(1)} ({items.length})
+          </h3>
+          <div style={{ padding: "0.5rem" }}>
+            {items.map((task) => (
+              <div
+                key={task.id}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  padding: "0.5rem",
+                  marginBottom: "0.5rem",
+                  background: "#fff",
+                }}
+              >
+                <strong>{task.id}</strong>: {task.title}
+                <div style={{ fontSize: "0.85rem", color: "#888" }}>{task.type}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-> **Tip:** Should you want to preprocess a stylesheet with Sass then make sure to [follow the installation instructions](adding-a-sass-stylesheet.md) and then change the stylesheet file extension as follows: `[name].module.scss` or `[name].module.sass`.
-
-CSS Modules let you use the same CSS class name in different files without worrying about naming clashes. Learn more about CSS Modules [here](https://css-tricks.com/css-modules-part-1-need/).
-
-## `Button.module.css`
-
-```css
-.error {
-  background-color: red;
-}
-```
-
-## `another-stylesheet.css`
-
-```css
-.error {
-  color: red;
-}
-```
-
-## `Button.js`
-
-```js
-import React, { Component } from 'react';
-import styles from './Button.module.css'; // Import css modules stylesheet as styles
-import './another-stylesheet.css'; // Import regular stylesheet
-
-class Button extends Component {
-  render() {
-    // reference as a js object
-    return <button className={styles.error}>Error Button</button>;
-  }
-}
-```
-
-## Result
-
-No clashes from other `.error` class names
-
-```html
-<!-- This button has red background but not red text -->
-<button class="Button_error_ax7yz">Error Button</button>
-```
-
-**This is an optional feature.** Regular `<link>` stylesheets and CSS files are fully supported. CSS Modules are turned on for files ending with the `.module.css` extension.
+export default KanbanBoard;
